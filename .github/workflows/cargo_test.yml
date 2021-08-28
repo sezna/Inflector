@@ -1,38 +1,40 @@
 name: Cargo Test
+
 on: [push]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    - name: Checkout repository
-      uses: actions/checkout@v2
+  build_test:
+   runs-on: ubuntu-latest
+   steps:
+   - name: Checkout repository
+     uses: actions/checkout@v2
 
-    - name: Install toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        profile: minimal
-        toolchain: stable
-        override: true
+   - name: Install toolchain
+     uses: actions-rs/toolchain@v1
+     with:
+       profile: minimal
+       toolchain: stable
+       override: true
 
-    - name: Install rustfmt
-      run: rustup component add rustfmt
+   - name: Install rustfmt
+     run: rustup component add rustfmt
 
-    - name: Check formatting
-      uses: actions-rs/cargo@v1
-      with:
-        command: fmt
-        args: --all --verbose -- --check
+   - name: Check formatting
+     uses: actions-rs/cargo@v1
+     with:
+       command: fmt
+       args: --all --verbose -- --check
 
-    - name: Deny Warnings
-      uses: actions-rs/cargo@v1
-      with:
-        command: build
-        args: --verbose
-      env:
-        RUSTFLAGS: "-D warnings"
+   - name: Deny Warnings
+     uses: actions-rs/cargo@v1
+     with:
+       command: build
+       args: --verbose
+     env:
+       RUSTFLAGS: "-D warnings"
 
-    - name: Run tests
-      uses: actions-rs/cargo@v1
-      with:
-        command: test
-        args: --verbose
+   - name: Run tests
+     uses: actions-rs/cargo@v1
+     with:
+       command: test
+       args: --verbose
